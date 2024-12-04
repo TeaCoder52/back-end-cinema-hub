@@ -40,14 +40,14 @@ export class StatisticsService {
 
 	async getMiddleStatistics() {
 		// Получение 4 самых популярных фильмов
-		const movies = await this.prisma.movie.findMany({
+		const topMovies = await this.prisma.movie.findMany({
 			select: {
 				title: true,
 				views: true
-			}
+			},
+			take: 4, 
+			orderBy: {views: "desc"}
 		})
-
-		const topMovies = movies.sort((a, b) => b.views - a.views).slice(0, 4)
 
 		// Получение продаж за прошедшие три недели
 		const startDate = dayjs().subtract(14, 'days').startOf('day').toDate()
